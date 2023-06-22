@@ -7,20 +7,20 @@
 <script type="module">
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-//figure out how to increase view box size with increasing number of nodes
-//currently fits like 6 nodes. 
+
 const svg1 = d3.create('svg').attr('viewBox', [0, 0, 1000, 1000]);
 
 const graph = {
-    nodes: ['a', 'b', 'c'],
+    nodes: ['a', 'b', 'c', 'd'],
     edges: [
-        ['a', 'c'],
         ['b', 'c'],
+        ['c', 'd'],
     ]
 };
 
 function appendCircles(svg1, graph) {
     const nodes = graph.nodes;
+    const edges = graph.edges;
     const circleSpacing = 200;
     const circleRadius = 50;
     const circles = {};
@@ -28,33 +28,36 @@ function appendCircles(svg1, graph) {
         const cx = index * circleSpacing + circleRadius;
         const circle = svg1.append('circle')
             .attr('cx', cx)
-            .attr('cy', '50%')
+            .attr('cy', '500')
             .attr('r', circleRadius)
             .attr('fill', 'green');
         circles[node] = circle;
-
-
         svg1.append('text')
             .attr('x', cx)
-            .attr('y', '50%')
+            .attr('y', '500')
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'central')
             .text(node)
             .attr('font-family', 'Arial')
             .attr('font-size', '15px')
             .attr('fill', 'black');
-
-
-        //     if (index < nodes.length - 1) {
-        //     const nextCx = (index + 1) * circleSpacing + circleRadius;
-        //     svg1.append('line')
-        //         .attr('x1', cx + circleRadius)
-        //         .attr('y1', '50%')
-        //         .attr('x2', nextCx - circleRadius)
-        //         .attr('y2', '50%')
-        //         .attr('stroke', 'black')
-        //         .attr('marker-end', 'url(#arrowhead)');
-        // }
+    });
+    edges.forEach(([source, target]) => {
+        const sourceCircle = circles[source];
+        const targetCircle = circles[target];
+        if (sourceCircle && targetCircle) {
+            const x1 = parseFloat(sourceCircle.attr('cx')) + circleRadius;
+            const y1 = parseFloat(sourceCircle.attr('cy'));
+            const x2 = parseFloat(targetCircle.attr('cx')) - circleRadius;
+            const y2 = parseFloat(targetCircle.attr('cy'));
+            svg1.append('line')
+                .attr('x1', x1)
+                .attr('y1', y1)
+                .attr('x2', x2)
+                .attr('y2', y2)
+                .attr('stroke', 'black')
+                .attr('marker-end', 'url(#arrowhead)');
+        }
     });
     return circles;
 }
@@ -70,12 +73,10 @@ svg1.append('defs')
     .style('fill', 'black');
 
 const circles = appendCircles(svg1, graph);
-circles['b'].attr('fill', 'red')
+
 const returnValue = svg1.node();
 
 container.append(returnValue);
 
 </script>
 </body>
-
-
