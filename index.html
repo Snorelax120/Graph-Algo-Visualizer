@@ -3,6 +3,7 @@
 
 </head>
 <body>
+    
 <div id="container"></div>
 <script type="module">
 
@@ -11,14 +12,15 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const svg1 = d3.create('svg').attr('viewBox', [0, 0, 1000, 1000]);
 
 const graph = {
-    nodes: ['a', 'b', 'c', 'd'],
+    nodes: ['a', 'b', 'c', 'd', 'e'],
     edges: [
         ['b', 'c'],
         ['a', 'd'],
-        ['b', 'd']
+        ['b', 'e']
     ]
 };
-
+// has the posiition of the circle and lines and solves a quadratic equation
+// to solve if they intersect or not
 function lineIntersectsCircle(x1, y1, x2, y2, cx, cy, r) {
     const dx = x2 - x1;
     const dy = y2 - y1;
