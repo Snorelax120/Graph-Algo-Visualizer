@@ -112,9 +112,9 @@
                 .attr('y2', y2)
                 .attr('stroke', 'black')
                 .attr('marker-end', 'url(#arrowhead)');
-        }
-    }
-});
+            }
+         }
+    });
     return circles;
 }
 
@@ -149,22 +149,28 @@
         const container = document.getElementById('container');
         container.innerHTML = '';
         container.appendChild(returnValue);
-    } else {
-        alert('Invalid input. Edges can only be connected between existing nodes.');
-    }
+    // } else {
+    //     alert('Invalid input. Edges can only be connected between existing nodes.');
+     }
         });
 
         function validateInput(nodes, edges) {
-            const nodeSet = new Set(nodes);
+    const nodeSet = new Set(nodes);
 
-            for (const [source, target] of edges) {
-                if (!nodeSet.has(source) || !nodeSet.has(target)) {
-                    return false;
-                }
-            }
-
-            return true;
+    for (const [source, target] of edges) {
+        if (!nodeSet.has(source)) {
+            alert(`Invalid input. Node "${source}" in an edge does not exist.`);
+            return false;
         }
+
+        if (!nodeSet.has(target)) {
+            alert(`Invalid input. Node "${target}" in an edge does not exist.`);
+            return false;
+        }
+    }
+
+    return true;
+}
 
     </script>
 </body>
