@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <head>
-
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body>
+    <div id="container">
+        <form id="graphForm">
+            <label for="nodesInput">Nodes:</label>
+            <input type="text" id="nodesInput" name="nodesInput" required>
+            <br>
+            <label for="edgesInput">Edges:</label>
+            <input type="text" id="edgesInput" name="edgesInput" required>
+             <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <script type="module">
+        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+        const svg1 = d3.create('svg').attr('viewBox', [0, 0, 1000, 1000]);
+        
+
+        //solves the quadratic euation of the circle and the line(arrow) to check if they intersect or not
+        function lineIntersectsCircle(x1, y1, x2, y2, cx, cy, r) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const a = dx * dx + dy * dy;
+            const b = 2 * (dx * (x1 - cx) + dy * (y1 - cy));
+            const c = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
+            const disc = b * b - 4 * a * c;
+            if (disc <= 0) {
+                return false;
+            }
+            const sqrtdisc = Math.sqrt(disc);
+            const t1 = (-b + sqrtdisc) / (2 * a);
+            const t2 = (-b - sqrtdisc) / (2 * a);
+            if ((0 < t1 && t1 < 1) || (0 < t2 && t2 < 1)) {
+                return true;
+            }
+            return false;
+        }
+
+        function appendCircles(svg1, graph) {
+            const nodes = graph.nodes;
+            const edges = graph.edges;
+            const circleSpacing = 200;
+            const circleRadius = 50;
+            const circles = {};
+
+            nodes.forEach((node, index) => {
+                const cx = index * circleSpacing + circleRadius;
+                const circle = svg1.append('circle')
+                    .attr('cx', cx)
+                    .attr('cy', '500')
+                    .attr('r', circleRadius)
+                    .attr('fill', 'green');
+                circles[node] = circle;
+                svg1.append('text')
+                    .attr('x', cx)
+                    .attr('y', '500')
+                    .attr('text-anchor', 'middle')
+                    .attr('dominant-baseline', 'central')
+                    .text(node)
+                    .attr('font-family', 'Arial')
+                    .attr('font-size', '15px')
+                    .attr('fill', 'black');
+            });
     
-<div id="container"></div>
-<script type="module">
-
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
-const svg1 = d3.create('svg').attr('viewBox', [0, 0, 1000, 1000]);
-
-const graph = {
-    nodes: ['a', 'b', 'c', 'd', 'e'],
-    edges: [
-        ['b', 'c'],
-        ['a', 'd'],
-        ['b', 'e']
-    ]
-};
-// has the posiition of the circle and lines and solves a quadratic equation
-// to solve if they intersect or not
-function lineIntersectsCircle(x1, y1, x2, y2, cx, cy, r) {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const a = dx * dx + dy * dy;
-    const b = 2 * (dx * (x1 - cx) + dy * (y1 - cy));
-    const c = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
-    const disc = b * b - 4 * a * c;
-    if (disc <= 0) {
-        return false;
-    }
-    const sqrtdisc = Math.sqrt(disc);
-    const t1 = (-b + sqrtdisc) / (2 * a);
-    const t2 = (-b - sqrtdisc) / (2 * a);
-    if ((0 < t1 && t1 < 1) || (0 < t2 && t2 < 1)) {
-        return true;
-    }
-    return false;
-}
-
-
-function appendCircles(svg1, graph) {
-    const nodes = graph.nodes;
-    const edges = graph.edges;
-    const circleSpacing = 200;
-    const circleRadius = 50;
-    const circles = {};
-    nodes.forEach((node, index) => {
-        const cx = index * circleSpacing + circleRadius;
-        const circle = svg1.append('circle')
-            .attr('cx', cx)
-            .attr('cy', '500')
-            .attr('r', circleRadius)
-            .attr('fill', 'green');
-        circles[node] = circle;
-        svg1.append('text')
-            .attr('x', cx)
-            .attr('y', '500')
-            .attr('text-anchor', 'middle')
-            .attr('dominant-baseline', 'central')
-            .text(node)
-            .attr('font-family', 'Arial')
-            .attr('font-size', '15px')
-            .attr('fill', 'black');
-    });
     edges.forEach(([source, target]) => {
     const sourceCircle = circles[source];
     const targetCircle = circles[target];
@@ -117,21 +118,53 @@ function appendCircles(svg1, graph) {
     return circles;
 }
 
-svg1.append('defs')
-    .append('marker')
-    .attr('id', 'arrowhead')
-    .attr('viewBox', '-10 -10 20 20')
-    .attr('markerWidth', 10)
-    .attr('markerHeight', 10)
-    .append('path')
-    .attr('d', 'M-10,-6L0,0L-10,6')
-    .style('fill', 'black');
+        svg1.append('defs')
+            .append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '-10 -10 20 20')
+            .attr('markerWidth', 10)
+            .attr('markerHeight', 10)
+            .append('path')
+            .attr('d', 'M-10,-6L0,0L-10,6')
+            .style('fill', 'black');
 
-const circles = appendCircles(svg1, graph);
+    const graphForm = document.getElementById('graphForm');
+    graphForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const nodesInput = document.getElementById('nodesInput').value;
+    const edgesInput = document.getElementById('edgesInput').value;
 
-const returnValue = svg1.node();
+    const nodes = nodesInput.split(',').map(node => node.trim());
+    const edges = edgesInput.split(',').map(edge => edge.trim().split(' '));
 
-container.append(returnValue);
+    if (validateInput(nodes, edges)) {
+        const graph = {
+            nodes: nodes,
+            edges: edges
+        };
 
-</script>
+        const circles = appendCircles(svg1, graph);
+
+        const returnValue = svg1.node();
+        const container = document.getElementById('container');
+        container.innerHTML = '';
+        container.appendChild(returnValue);
+    } else {
+        alert('Invalid input. Edges can only be connected between existing nodes.');
+    }
+        });
+
+        function validateInput(nodes, edges) {
+            const nodeSet = new Set(nodes);
+
+            for (const [source, target] of edges) {
+                if (!nodeSet.has(source) || !nodeSet.has(target)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    </script>
 </body>
