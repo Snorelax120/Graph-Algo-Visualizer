@@ -154,23 +154,29 @@
      }
         });
 
+    
         function validateInput(nodes, edges) {
-    const nodeSet = new Set(nodes);
+            const nodeSet = new Set(nodes);
+            const invalidNodes = [];
 
-    for (const [source, target] of edges) {
-        if (!nodeSet.has(source)) {
-            alert(`Invalid input. Node "${source}" in an edge does not exist.`);
-            return false;
+            for (const [source, target] of edges) {
+                if (!nodeSet.has(source) && !invalidNodes.includes(source)) {
+                    invalidNodes.push(source);
+                }
+
+                if (!nodeSet.has(target) && !invalidNodes.includes(target)) {
+                    invalidNodes.push(target);
+                }
+            }
+
+            if (invalidNodes.length > 0) {
+                const invalidNodesString = invalidNodes.join(', ');
+                alert(`Invalid input. Nodes [${invalidNodesString}] in the edges do not exist.`);
+                return false;
+            }
+
+            return true;
         }
-
-        if (!nodeSet.has(target)) {
-            alert(`Invalid input. Node "${target}" in an edge does not exist.`);
-            return false;
-        }
-    }
-
-    return true;
-}
 
     </script>
 </body>
