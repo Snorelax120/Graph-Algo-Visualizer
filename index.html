@@ -9,9 +9,15 @@
             <label for="nodesInput">Nodes:</label>
             <input type="text" id="nodesInput" name="nodesInput" required>
             <br>
-            <label for="edgesInput">Edges:</label>
+            <label for="edgesInput">Edges: </label>
             <input type="text" id="edgesInput" name="edgesInput" required>
-             <br>
+            <br>
+            <label for="startNodeInput">Start Node:</label>
+            <input type="text" id="startNodeInput">
+            <br>
+            <label for="endNodeInput">End Node:</label>
+            <input type="text" id="endNodeInput" required>
+            <br>
             <input type="submit" value="Submit">
         </form>
     </div>
@@ -21,7 +27,7 @@
     <script type="module">
         import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-        const svg1 = d3.create('svg').attr('viewBox', [0, 0, 9000, 1000]);
+        const svg1 = d3.create('svg').attr('viewBox', [0, 0, 3000, 1000]);
 
         
 
@@ -67,7 +73,7 @@
                     .attr('dominant-baseline', 'central')
                     .text(node)
                     .attr('font-family', 'Arial')
-                    .attr('font-size', '15px')
+                    .attr('font-size', '40px')
                     .attr('fill', 'black');
             });
     
