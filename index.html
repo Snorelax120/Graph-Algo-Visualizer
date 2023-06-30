@@ -128,7 +128,7 @@
     });
     return circles;
 }
-
+        //arrowhead marker
         svg1.append('defs')
             .append('marker')
             .attr('id', 'arrowhead')
@@ -147,12 +147,16 @@
 
     const nodes = nodesInput.split(',').map(node => node.trim());
     const edges = edgesInput.split(',').map(edge => edge.trim().split(' '));
+    console.log(nodes)
+    console.log(edges)
 
     if (validateInput(nodes, edges)) {
         const graph = {
             nodes: nodes,
             edges: edges
         };
+        console.log(graph);
+
 
         const circles = appendCircles(svg1, graph);
 
