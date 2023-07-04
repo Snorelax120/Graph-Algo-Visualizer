@@ -75,7 +75,7 @@
                     .attr('font-family', 'Arial')
                     .attr('font-size', '40px')
                     .attr('fill', 'black');
-            });
+                });
     
     edges.forEach(([source, target]) => {
     const sourceCircle = circles[source];
@@ -144,11 +144,16 @@
     event.preventDefault();
     const nodesInput = document.getElementById('nodesInput').value;
     const edgesInput = document.getElementById('edgesInput').value;
+    // const edgesInput = document.getElementById('edgesInput').value;
+    // const edgesInput = document.getElementById('edgesInput').value;
+
 
     const nodes = nodesInput.split(',').map(node => node.trim());
     const edges = edgesInput.split(',').map(edge => edge.trim().split(' '));
     console.log(nodes)
     console.log(edges)
+
+    
 
     if (validateInput(nodes, edges)) {
         const graph = {
@@ -156,6 +161,21 @@
             edges: edges
         };
         console.log(graph);
+
+        const adjacencyList = {};
+
+        edges.forEach(([source, target]) => {
+            if (!adjacencyList[source]) {
+                adjacencyList[source] = [];
+            }
+            if (!adjacencyList[target]) {
+                adjacencyList[target] = [];
+            }
+            adjacencyList[source].push(target);
+            adjacencyList[target].push(source); // Assuming an undirected graph
+        });
+
+        console.log(adjacencyList);
 
 
         const circles = appendCircles(svg1, graph);
