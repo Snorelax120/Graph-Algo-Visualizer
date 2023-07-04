@@ -22,7 +22,12 @@
         </form>
     </div>
 
+    <div id="resultContainer"></div> 
+
+
     <div id="container"></div>
+    
+
 
     <script type="module">
         import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
@@ -127,7 +132,7 @@
          }
     });
     return circles;
-}
+    }
         //arrowhead marker
         svg1.append('defs')
             .append('marker')
@@ -144,14 +149,14 @@
     event.preventDefault();
     const nodesInput = document.getElementById('nodesInput').value;
     const edgesInput = document.getElementById('edgesInput').value;
-    // const edgesInput = document.getElementById('edgesInput').value;
-    // const edgesInput = document.getElementById('edgesInput').value;
+    const startNodeInput = document.getElementById('startNodeInput').value;
+    const endNodeInput = document.getElementById('endNodeInput').value;
 
 
     const nodes = nodesInput.split(',').map(node => node.trim());
     const edges = edgesInput.split(',').map(edge => edge.trim().split(' '));
-    console.log(nodes)
-    console.log(edges)
+    // console.log(nodes)
+    // console.log(edges)
 
     
 
@@ -162,32 +167,61 @@
         };
         console.log(graph);
 
-        const adjacencyList = {};
+    //Adjacency list maker
+    const adjacencyList = {};
 
-        edges.forEach(([source, target]) => {
-            if (!adjacencyList[source]) {
-                adjacencyList[source] = [];
-            }
-            if (!adjacencyList[target]) {
-                adjacencyList[target] = [];
-            }
-            adjacencyList[source].push(target);
-            adjacencyList[target].push(source); // Assuming an undirected graph
-        });
+    edges.forEach(([source, target]) => {
+        if (!adjacencyList[source]) {
+            adjacencyList[source] = [];
+        }
+        if (!adjacencyList[target]) {
+            adjacencyList[target] = [];
+        }
+        adjacencyList[source].push(target);
+    });
 
-        console.log(adjacencyList);
+    console.log(adjacencyList);
 
 
         const circles = appendCircles(svg1, graph);
+
+        const isTraversable = isPathExists(adjacencyList, startNodeInput, endNodeInput);
+        console.log('Is traversable:', isTraversable);
 
         const returnValue = svg1.node();
         const container = document.getElementById('container');
         container.innerHTML = '';
         container.appendChild(returnValue);
+
+        const resultContainer = document.getElementById('resultContainer');
+        resultContainer.textContent = isTraversable ? 'Path is traversable' : 'Path is not traversable';
     // } else {
     //     alert('Invalid input. Edges can only be connected between existing nodes.');
      }
         });
+
+    // DFS search
+    function isPathExists(adjacencyList, startNode, endNode) {
+        const visited = new Set();
+        const stack = [startNode];
+
+        while (stack.length > 0) {
+            const node = stack.pop();
+            if (node === endNode) {
+                return true;
+            }
+            visited.add(node);
+            const neighbors = adjacencyList[node] || [];
+            neighbors.forEach(neighbor => {
+                if (!visited.has(neighbor)) {
+                    stack.push(neighbor);
+                }
+            });
+        }
+
+            return false;
+            console.log(visited)
+            }
 
     
         function validateInput(nodes, edges) {

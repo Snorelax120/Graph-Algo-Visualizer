@@ -22,3 +22,8 @@
     justify-content: flex-start;
     overflow: hidden;
   }
+
+  #resultContainer {
+    margin-top: 20px;
+    font-size: 18px;
+  }
