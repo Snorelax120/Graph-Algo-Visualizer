@@ -21,6 +21,7 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+    <pre id="adjList"></pre> 
 
     <div id="resultContainer"></div> 
 
@@ -131,6 +132,7 @@
             }
          }
     });
+    
     return circles;
     }
         //arrowhead marker
@@ -179,6 +181,8 @@
         }
         adjacencyList[source].push(target);
     });
+    const adjList = document.getElementById('adjList');
+    adjList.innerText = JSON.stringify(adjacencyList, null, 2);
 
     console.log(adjacencyList);
 
@@ -216,36 +220,36 @@
                 if (!visited.has(neighbor)) {
                     stack.push(neighbor);
                 }
-            });
-        }
+             });
+            }
 
             return false;
             console.log(visited)
-            }
+        }
 
     
-        function validateInput(nodes, edges) {
-            const nodeSet = new Set(nodes);
-            const invalidNodes = [];
+    function validateInput(nodes, edges) {
+        const nodeSet = new Set(nodes);
+        const invalidNodes = [];
 
-            for (const [source, target] of edges) {
-                if (!nodeSet.has(source) && !invalidNodes.includes(source)) {
-                    invalidNodes.push(source);
-                }
-
-                if (!nodeSet.has(target) && !invalidNodes.includes(target)) {
-                    invalidNodes.push(target);
-                }
+        for (const [source, target] of edges) {
+            if (!nodeSet.has(source) && !invalidNodes.includes(source)) {
+                invalidNodes.push(source);
             }
 
-            if (invalidNodes.length > 0) {
-                const invalidNodesString = invalidNodes.join(', ');
-                alert(`Invalid input. Nodes [${invalidNodesString}] in the edges do not exist.`);
-                return false;
+            if (!nodeSet.has(target) && !invalidNodes.includes(target)) {
+                invalidNodes.push(target);
             }
-
-            return true;
         }
+
+        if (invalidNodes.length > 0) {
+            const invalidNodesString = invalidNodes.join(', ');
+            alert(`Invalid input. Nodes [${invalidNodesString}] in the edges do not exist.`);
+            return false;
+        }
+
+        return true;
+    }
 
     </script>
 </body>
