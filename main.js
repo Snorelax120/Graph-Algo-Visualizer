@@ -21,15 +21,26 @@ function lineIntersectsCircle(x1, y1, x2, y2, cx, cy, r) {
   return false;
 }
 
-function fillFormWithPresetData() {
+function fillFormWithPresetData1() {
   document.getElementById("nodesInput").value = "A, B, C, D";
   document.getElementById("edgesInput").value = "A B, B C, C D";
   document.getElementById("startNodeInput").value = "A";
   document.getElementById("endNodeInput").value = "D";
 }
 
-const presetDataButton = document.getElementById('presetDataButton');
-presetDataButton.addEventListener('click', fillFormWithPresetData);
+const presetDataButton1 = document.getElementById('presetDataButton1');
+presetDataButton1.addEventListener('click', fillFormWithPresetData1);
+
+
+function fillFormWithPresetData2() {
+    document.getElementById("nodesInput").value = "A, B, C, D, E, F, G";
+    document.getElementById("edgesInput").value = "A B, B G, C F, E F, D G";
+    document.getElementById("startNodeInput").value = "B";
+    document.getElementById("endNodeInput").value = "G";
+  }
+  
+  const presetDataButton2 = document.getElementById('presetDataButton2');
+  presetDataButton2.addEventListener('click', fillFormWithPresetData2);
 
 function appendCircles(svg1, graph) {
   const nodes = graph.nodes;
