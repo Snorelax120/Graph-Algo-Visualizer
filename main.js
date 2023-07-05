@@ -233,7 +233,7 @@ function isPathExists(adjacencyList, startNode, endNode) {
   }
 
   return false;
-  console.log(visited);
+  console.log('visited' + visited);
 }
 
 function validateInput(nodes, edges) {
