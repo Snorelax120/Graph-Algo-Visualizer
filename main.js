@@ -34,7 +34,7 @@ presetDataButton1.addEventListener('click', fillFormWithPresetData1);
 
 function fillFormWithPresetData2() {
     document.getElementById("nodesInput").value = "A, B, C, D, E, F, G";
-    document.getElementById("edgesInput").value = "A B, B G, C F, E F, D G";
+    document.getElementById("edgesInput").value = "A B, C F, E F, D G";
     document.getElementById("startNodeInput").value = "B";
     document.getElementById("endNodeInput").value = "G";
   }
@@ -236,6 +236,28 @@ function isPathExists(adjacencyList, startNode, endNode) {
   console.log('visited' + visited);
 }
 
+    // DFS search to find the path
+    function findPath(adjacencyList, startNode, endNode) {
+        const visited = new Set();
+        const stack = [[startNode, []]];
+  
+        while (stack.length > 0) {
+          const [node, path] = stack.pop();
+          if (node === endNode) {
+            return [...path, node];
+          }
+          visited.add(node);
+          const neighbors = adjacencyList[node] || [];
+          neighbors.forEach((neighbor) => {
+            if (!visited.has(neighbor)) {
+              stack.push([neighbor, [...path, node]]);
+            }
+          });
+        }
+  
+        return null;
+      }
+
 function validateInput(nodes, edges) {
   const nodeSet = new Set(nodes);
   const invalidNodes = [];
@@ -260,3 +282,41 @@ function validateInput(nodes, edges) {
 
   return true;
 }
+//ispathexistsbfs
+// function isPathExists(adjacencyList, startNode, endNode) {
+//     const queue = [startNode];
+//     const visited = new Set();
+//     const pathMap = {};
+  
+//     while (queue.length > 0) {
+//       const node = queue.shift();
+//       if (node === endNode) {
+//         // Build the path from endNode to startNode
+//         const path = [endNode];
+//         let current = endNode;
+//         while (current !== startNode) {
+//           const prev = pathMap[current];
+//           path.unshift(prev);
+//           current = prev;
+//         }
+//         return {
+//           exists: true,
+//           path: path,
+//         };
+//       }
+//       visited.add(node);
+//       const neighbors = adjacencyList[node] || [];
+//       for (const neighbor of neighbors) {
+//         if (!visited.has(neighbor)) {
+//           queue.push(neighbor);
+//           // Store the path information
+//           pathMap[neighbor] = node;
+//         }
+//       }
+//     }
+  
+//     return {
+//       exists: false,
+//       path: [],
+//     };
+//   }
