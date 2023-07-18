@@ -1,5 +1,7 @@
 const svg1 = d3.create("svg").attr("viewBox", [0, 0, 3000, 1000]);
 
+let visited = [];
+
 //solves the quadratic equations of the circle and the line(arrow) to check if they intersect or not
 function lineIntersectsCircle(x1, y1, x2, y2, cx, cy, r) {
   const dx = x2 - x1;
@@ -196,6 +198,12 @@ graphForm.addEventListener("submit", function (event) {
       : "Path is not traversable";
     // } else {
     //     alert('Invalid input. Edges can only be connected between existing nodes.');
+
+    const path = findPath(adjacencyList, startNodeInput, endNodeInput);
+    console.log('Path:', path);
+
+    displayVisitedNodes();
+
   }
 });
 
@@ -214,27 +222,25 @@ function formatAdjacencyList(adjacencyList) {
 }
 
 // DFS search
-function isPathExists(adjacencyList, startNode, endNode) {
-  const visited = new Set();
-  const stack = [startNode];
-
-  while (stack.length > 0) {
-    const node = stack.pop();
-    if (node === endNode) {
-      return true;
-    }
-    visited.add(node);
-    const neighbors = adjacencyList[node] || [];
-    neighbors.forEach((neighbor) => {
-      if (!visited.has(neighbor)) {
-        stack.push(neighbor);
+function isPathExists(adjacencyList, startNode, endNode) {;
+    const stack = [startNode];
+  
+    while (stack.length > 0) {
+      const node = stack.pop();
+      if (node === endNode) {
+        return true;
       }
-    });
+      visited.push(node); // Add the visited node to the visited array
+      const neighbors = adjacencyList[node] || [];
+      neighbors.forEach((neighbor) => {
+        if (!visited.includes(neighbor)) {
+          stack.push(neighbor);
+        }
+      });
+    }
+  
+    return false;
   }
-
-  return false;
-  console.log('visited' + visited);
-}
 
     // DFS search to find the path
     function findPath(adjacencyList, startNode, endNode) {
@@ -257,6 +263,11 @@ function isPathExists(adjacencyList, startNode, endNode) {
   
         return null;
       }
+
+function displayVisitedNodes() {
+    const visitedNodesList = document.getElementById("visitedNodesList");
+    visitedNodesList.innerText = "Visited Nodes:\n" + visited.join(", ");
+}
 
 function validateInput(nodes, edges) {
   const nodeSet = new Set(nodes);

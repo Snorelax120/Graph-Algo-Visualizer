@@ -242,6 +242,7 @@
 
       while (stack.length > 0) {
         const [node, path] = stack.pop();
+        console.log("Visited:", node);
         if (node === endNode) {
           return [...path, node];
         }
